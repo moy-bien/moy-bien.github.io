@@ -553,63 +553,9 @@ function cleanEmptyValues(obj) {
 }
 
 function validateForm() {
-    const data = getFormData();
+    const data = FormHandler.collectFormData();
+    const errors = DataValidator.validate(data);
     const results = document.getElementById('validationResults');
-
-    // Basic validation
-    const errors = [];
-
-    // Check required fields
-    if (!data.project?.title || data.project.title.length < 3) {
-        errors.push('Project title is required (minimum 3 characters)');
-    }
-    if (!data.project?.sponsor) errors.push('Project sponsor is required');
-    if (!data.project?.primary_contact) errors.push('Primary contact is required');
-
-    if (!data.client?.organization) errors.push('Client organization is required');
-    if (!data.client?.industry) errors.push('Client industry is required');
-    if (!data.client?.stakeholders || data.client.stakeholders.length === 0) {
-        errors.push('At least one stakeholder is required');
-    }
-
-    if (!data.audience?.size || data.audience.size < 1) {
-        errors.push('Audience size is required (minimum 1)');
-    }
-    if (!data.audience?.segments || data.audience.segments.length === 0) {
-        errors.push('At least one audience segment is required');
-    }
-
-    if (!data.business?.goals || data.business.goals.length === 0) {
-        errors.push('At least one business goal is required');
-    }
-    if (!data.business?.kpis || data.business.kpis.length === 0) {
-        errors.push('At least one KPI is required');
-    }
-
-    if (!data.constraints?.budget) {
-        errors.push('Budget information is required');
-    } else {
-        if (!data.constraints.budget.currency || data.constraints.budget.currency.length !== 3) {
-            errors.push('Currency must be a 3-letter code');
-        }
-        if (data.constraints.budget.amount === undefined || data.constraints.budget.amount < 0) {
-            errors.push('Budget amount must be 0 or greater');
-        }
-    }
-    if (!data.constraints?.timebox) errors.push('Timebox is required');
-    if (!data.constraints?.resources || data.constraints.resources.length === 0) {
-        errors.push('At least one resource is required');
-    }
-    if (!data.constraints?.policies || data.constraints.policies.length === 0) {
-        errors.push('At least one policy is required');
-    }
-
-    if (!data.strategy?.delivery || data.strategy.delivery.length === 0) {
-        errors.push('At least one delivery method is required');
-    }
-    if (!data.strategy?.engagement || data.strategy.engagement.length === 0) {
-        errors.push('At least one engagement strategy is required');
-    }
 
     // Display results
     if (errors.length === 0) {
@@ -627,17 +573,47 @@ function validateForm() {
 }
 
 function downloadJSON() {
-    const data = getFormData();
-    const json = JSON.stringify(data, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'learning-proposal.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    FormHandler.exportToJSON();
+}
+
+// Generate PDF
+async function generatePDF() {
+    try {
+        const data = FormHandler.collectFormData();
+        const errors = DataValidator.validate(data);
+
+        if (errors.length > 0) {
+            alert('Please fix validation errors before generating PDF');
+            validateForm();
+            return;
+        }
+
+        const blob = await PDFGenerator.generateProposal(data);
+        PDFGenerator.downloadPDF(blob);
+        alert('PDF generation complete! (Note: This is a mock PDF. Integrate jsPDF for production use.)');
+    } catch (error) {
+        alert('PDF generation failed: ' + error.message);
+    }
+}
+
+// Generate PowerPoint
+async function generatePPTX() {
+    try {
+        const data = FormHandler.collectFormData();
+        const errors = DataValidator.validate(data);
+
+        if (errors.length > 0) {
+            alert('Please fix validation errors before generating PowerPoint');
+            validateForm();
+            return;
+        }
+
+        const blob = await PPTXGenerator.generateProposal(data);
+        PPTXGenerator.downloadPPTX(blob);
+        alert('PowerPoint generation complete! (Note: This is a mock PPTX. Integrate PptxGenJS for production use.)');
+    } catch (error) {
+        alert('PowerPoint generation failed: ' + error.message);
+    }
 }
 
 // Template management
@@ -659,7 +635,7 @@ function applyTemplate(templateName) {
 }
 
 // AI Summaries functions
-function generateBusinessContextSummary() {
+async function generateBusinessContextSummary() {
     const background = document.getElementById('aiInputBackground').value;
     const problemStatement = document.getElementById('aiInputProblem').value;
 
@@ -668,34 +644,23 @@ function generateBusinessContextSummary() {
         return;
     }
 
-    // Placeholder for AI generation
-    // In a real implementation, this would call an AI API
-    const mockSummary = `DRAFT BUSINESS CONTEXT SUMMARY
+    try {
+        // Use AI Summarizer module
+        const result = await AISummarizer.generateBusinessContextSummary({
+            background: background,
+            problem_statement: problemStatement
+        });
 
-Based on the provided background and problem statement:
+        // Update form fields with generated summary
+        document.getElementById('aiDraft').value = result.draft;
+        document.getElementById('aiStatus').value = result.status;
+        document.getElementById('aiConfidence').value = result.confidence;
+        updateStatusWarning();
 
-Summary: ${background ? background.substring(0, 100) + '...' : 'No background provided'}
-
-Key Points:
-- Analysis of the problem space
-- Business impact considerations
-- Stakeholder concerns
-
-Unknowns:
-- Specific metrics and targets need clarification
-- Resource availability to be confirmed
-
-Risk Flags:
-- Timeline constraints may affect deliverables
-- Stakeholder alignment needs verification
-
-[Note: This is a placeholder. In production, this would be generated by an AI service based on the input data.]`;
-
-    document.getElementById('aiDraft').value = mockSummary;
-    document.getElementById('aiStatus').value = 'awaiting_review';
-    updateStatusWarning();
-
-    alert('AI summary generated! Please review and update the status accordingly.');
+        alert(`AI summary generated!\n\nConfidence: ${(result.confidence * 100).toFixed(0)}%\nStatus: ${result.status}\n\nPlease review and approve.`);
+    } catch (error) {
+        alert('AI summary generation failed: ' + error.message);
+    }
 }
 
 function updateStatusWarning() {
