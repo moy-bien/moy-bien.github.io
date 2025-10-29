@@ -11,6 +11,16 @@
         <header>
             <h1>Learning Proposal Intake Form</h1>
             <p class="subtitle">Complete all required sections to submit your learning and development proposal</p>
+
+            <div class="template-selector">
+                <label for="templateSelect">Template:</label>
+                <select id="templateSelect" onchange="applyTemplate(this.value)">
+                    <option value="">All Sections (Default)</option>
+                    <option value="standard">Standard Learning Proposal</option>
+                    <option value="enterprise">Enterprise Learning Proposal</option>
+                    <option value="quick">Quick Assessment</option>
+                </select>
+            </div>
         </header>
 
         <div class="progress-bar">
@@ -674,6 +684,7 @@
         <div id="validationResults" class="validation-results"></div>
     </div>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

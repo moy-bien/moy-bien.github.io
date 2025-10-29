@@ -640,6 +640,24 @@ function downloadJSON() {
     URL.revokeObjectURL(url);
 }
 
+// Template management
+function applyTemplate(templateName) {
+    if (!templateName) {
+        // Show all sections
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.style.display = '';
+        });
+        console.log('Showing all sections');
+        return;
+    }
+
+    const success = TemplateManager.applyTemplate(templateName);
+    if (success) {
+        const template = PROPOSAL_CONFIG.templates[templateName];
+        alert(`Applied template: ${template.name}\n\n${template.description}\n\nVisible sections: ${template.sections.join(', ')}`);
+    }
+}
+
 // AI Summaries functions
 function generateBusinessContextSummary() {
     const background = document.getElementById('aiInputBackground').value;
