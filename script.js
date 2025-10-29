@@ -1,6 +1,6 @@
 // Tab navigation
 let currentTab = 'project';
-const tabs = ['project', 'client', 'audience', 'business', 'constraints', 'strategy', 'curriculum', 'plan', 'resources', 'legal', 'ai_summaries'];
+const tabs = ['project', 'client', 'audience', 'business', 'constraints', 'strategy', 'curriculum', 'plan', 'legal', 'ai_summaries'];
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize tab buttons
@@ -166,6 +166,35 @@ function addSegment() {
             <input type="text" name="audience.segments[].tech_env" placeholder="e.g., Windows 10, Chrome, Mobile devices" data-array="true">
             <span class="hint">Devices/browsers/apps - Comma-separated values</span>
         </div>
+
+        <h4>Operational Availability Override (Optional)</h4>
+        <p class="hint" style="margin-bottom: 1rem;">Override global constraints for this specific segment if their availability differs.</p>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Max Time Away per Session (min)</label>
+                <input type="number" name="audience.segments[].operational_availability_override.max_time_away_per_session_minutes" min="0" placeholder="Override">
+            </div>
+            <div class="form-group">
+                <label>Max Total Time per Week (min)</label>
+                <input type="number" name="audience.segments[].operational_availability_override.max_total_time_away_per_week_minutes" min="0" placeholder="Override">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Blackout Windows (Segment-specific)</label>
+            <input type="text" name="audience.segments[].operational_availability_override.scheduling_blackout_windows" placeholder="e.g., Daily 11:30-14:00 local" data-array="true">
+            <span class="hint">Comma-separated values</span>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Min Break per 4hrs (min)</label>
+                <input type="number" name="audience.segments[].operational_availability_override.break_requirements.min_break_minutes_per_4hrs" min="0" placeholder="Override">
+            </div>
+            <div class="form-group">
+                <label>Meal Break (min)</label>
+                <input type="number" name="audience.segments[].operational_availability_override.break_requirements.meal_minutes" min="0" placeholder="Override">
+            </div>
+        </div>
+
         <button type="button" class="btn-remove" onclick="removeArrayItem(this.parentElement)">Remove Segment</button>
     `;
     container.appendChild(div);
@@ -415,34 +444,12 @@ function addRisk() {
     container.appendChild(div);
 }
 
-function addExistingAsset() {
-    const container = document.getElementById('existingAssets');
+function addBlackoutWindow() {
+    const container = document.getElementById('blackoutWindows');
     const div = document.createElement('div');
     div.className = 'array-item';
     div.innerHTML = `
-        <input type="text" name="resources.existing_assets[]" placeholder="Asset description">
-        <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
-    `;
-    container.appendChild(div);
-}
-
-function addReference() {
-    const container = document.getElementById('additionalReferences');
-    const div = document.createElement('div');
-    div.className = 'array-item';
-    div.innerHTML = `
-        <input type="text" name="resources.additional_references[]" placeholder="Reference or URL">
-        <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
-    `;
-    container.appendChild(div);
-}
-
-function addTool() {
-    const container = document.getElementById('toolsStack');
-    const div = document.createElement('div');
-    div.className = 'array-item';
-    div.innerHTML = `
-        <input type="text" name="resources.tools_stack[]" placeholder="Tool or platform">
+        <input type="text" name="constraints.operational_availability.scheduling_blackout_windows[]" placeholder="e.g., Daily 11:30-14:00 local">
         <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
     `;
     container.appendChild(div);

@@ -65,7 +65,24 @@
               "geos": { "type": "array", "items": { "type": "string" } },
               "languages": { "type": "array", "items": { "type": "string" } },
               "access_needs": { "type": "array", "items": { "type": "string" } },
-              "tech_env": { "type": "array", "items": { "type": "string" }, "description": "Devices/browsers/apps" }
+              "tech_env": { "type": "array", "items": { "type": "string" }, "description": "Devices/browsers/apps" },
+              "operational_availability_override": {
+                "type": "object",
+                "description": "Optional override for this segment if availability differs from global constraints.",
+                "properties": {
+                  "max_time_away_per_session_minutes": { "type": "integer", "minimum": 0 },
+                  "max_total_time_away_per_week_minutes": { "type": "integer", "minimum": 0 },
+                  "scheduling_blackout_windows": { "type": "array", "items": { "type": "string", "description": "e.g., Daily 11:30-14:00 local; YYYY-MM-DDThh:mm/YYYY-MM-DDThh:mm" } },
+                  "break_requirements": {
+                    "type": "object",
+                    "properties": {
+                      "min_break_minutes_per_4hrs": { "type": "integer", "minimum": 0 },
+                      "meal_minutes": { "type": "integer", "minimum": 0 }
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
             }
           }
         }
@@ -114,7 +131,24 @@
           "type": "array",
           "items": { "type": "string", "description": "Compliance, accessibility, data" }
         },
-        "content_rights": { "type": "string", "enum": ["client_owns", "shared", "vendor_owns"] }
+        "content_rights": { "type": "string", "enum": ["client_owns", "shared", "vendor_owns"] },
+        "operational_availability": {
+          "type": "object",
+          "description": "Global defaults for how long participants can be away from operations; drives modality and session design.",
+          "properties": {
+            "max_time_away_per_session_minutes": { "type": "integer", "minimum": 0, "description": "Hard cap per learning session." },
+            "max_total_time_away_per_week_minutes": { "type": "integer", "minimum": 0, "description": "Weekly cap across all sessions." },
+            "scheduling_blackout_windows": { "type": "array", "items": { "type": "string", "description": "e.g., Daily 11:30-14:00 local; YYYY-MM-DDThh:mm/YYYY-MM-DDThh:mm" } },
+            "break_requirements": {
+              "type": "object",
+              "properties": {
+                "min_break_minutes_per_4hrs": { "type": "integer", "minimum": 0 },
+                "meal_minutes": { "type": "integer", "minimum": 0 }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
       }
     },
     "strategy": {
@@ -209,14 +243,6 @@
             }
           }
         }
-      }
-    },
-    "resources": {
-      "type": "object",
-      "properties": {
-        "existing_assets": { "type": "array", "items": { "type": "string" } },
-        "additional_references": { "type": "array", "items": { "type": "string" } },
-        "tools_stack": { "type": "array", "items": { "type": "string" } }
       }
     },
     "legal": {
