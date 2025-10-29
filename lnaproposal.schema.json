@@ -70,14 +70,14 @@
                 "type": "object",
                 "description": "Optional override for this segment if availability differs from global constraints.",
                 "properties": {
-                  "max_time_away_per_session_minutes": { "type": "integer", "minimum": 0 },
-                  "max_total_time_away_per_week_minutes": { "type": "integer", "minimum": 0 },
+                  "max_time_away_per_session_hours": { "type": "number", "minimum": 0, "multipleOf": 0.5 },
+                  "max_total_time_away_per_week_hours": { "type": "number", "minimum": 0, "multipleOf": 0.5 },
                   "scheduling_blackout_windows": { "type": "array", "items": { "type": "string", "description": "e.g., Daily 11:30-14:00 local; YYYY-MM-DDThh:mm/YYYY-MM-DDThh:mm" } },
                   "break_requirements": {
                     "type": "object",
                     "properties": {
-                      "min_break_minutes_per_4hrs": { "type": "integer", "minimum": 0 },
-                      "meal_minutes": { "type": "integer", "minimum": 0 }
+                      "min_break_hours_per_4hrs": { "type": "number", "minimum": 0, "multipleOf": 0.25 },
+                      "meal_hours": { "type": "number", "minimum": 0, "multipleOf": 0.25 }
                     }
                   }
                 },
@@ -136,14 +136,14 @@
           "type": "object",
           "description": "Global defaults for how long participants can be away from operations; drives modality and session design.",
           "properties": {
-            "max_time_away_per_session_minutes": { "type": "integer", "minimum": 0, "description": "Hard cap per learning session." },
-            "max_total_time_away_per_week_minutes": { "type": "integer", "minimum": 0, "description": "Weekly cap across all sessions." },
+            "max_time_away_per_session_hours": { "type": "number", "minimum": 0, "multipleOf": 0.5, "description": "Hard cap per learning session in hours (0.5 hour increments)." },
+            "max_total_time_away_per_week_hours": { "type": "number", "minimum": 0, "multipleOf": 0.5, "description": "Weekly cap across all sessions in hours (0.5 hour increments)." },
             "scheduling_blackout_windows": { "type": "array", "items": { "type": "string", "description": "e.g., Daily 11:30-14:00 local; YYYY-MM-DDThh:mm/YYYY-MM-DDThh:mm" } },
             "break_requirements": {
               "type": "object",
               "properties": {
-                "min_break_minutes_per_4hrs": { "type": "integer", "minimum": 0 },
-                "meal_minutes": { "type": "integer", "minimum": 0 }
+                "min_break_hours_per_4hrs": { "type": "number", "minimum": 0, "multipleOf": 0.25, "description": "Minimum break duration in hours (0.25 hour increments = 15 minutes)." },
+                "meal_hours": { "type": "number", "minimum": 0, "multipleOf": 0.25, "description": "Meal break duration in hours (0.25 hour increments = 15 minutes)." }
               }
             }
           },

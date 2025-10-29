@@ -171,12 +171,12 @@ function addSegment() {
         <p class="hint" style="margin-bottom: 1rem;">Override global constraints for this specific segment if their availability differs.</p>
         <div class="form-row">
             <div class="form-group">
-                <label>Max Time Away per Session (min)</label>
-                <input type="number" name="audience.segments[].operational_availability_override.max_time_away_per_session_minutes" min="0" placeholder="Override">
+                <label>Max Time Away per Session (hours)</label>
+                <input type="number" name="audience.segments[].operational_availability_override.max_time_away_per_session_hours" min="0" step="0.5" placeholder="Hours">
             </div>
             <div class="form-group">
-                <label>Max Total Time per Week (min)</label>
-                <input type="number" name="audience.segments[].operational_availability_override.max_total_time_away_per_week_minutes" min="0" placeholder="Override">
+                <label>Max Total Time per Week (hours)</label>
+                <input type="number" name="audience.segments[].operational_availability_override.max_total_time_away_per_week_hours" min="0" step="0.5" placeholder="Hours">
             </div>
         </div>
         <div class="form-group">
@@ -186,12 +186,12 @@ function addSegment() {
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Min Break per 4hrs (min)</label>
-                <input type="number" name="audience.segments[].operational_availability_override.break_requirements.min_break_minutes_per_4hrs" min="0" placeholder="Override">
+                <label>Min Break per 4hrs (hours)</label>
+                <input type="number" name="audience.segments[].operational_availability_override.break_requirements.min_break_hours_per_4hrs" min="0" step="0.25" placeholder="Hours">
             </div>
             <div class="form-group">
-                <label>Meal Break (min)</label>
-                <input type="number" name="audience.segments[].operational_availability_override.break_requirements.meal_minutes" min="0" placeholder="Override">
+                <label>Meal Break (hours)</label>
+                <input type="number" name="audience.segments[].operational_availability_override.break_requirements.meal_hours" min="0" step="0.25" placeholder="Hours">
             </div>
         </div>
 

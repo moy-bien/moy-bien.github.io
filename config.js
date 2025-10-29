@@ -65,12 +65,12 @@ const PROPOSAL_CONFIG = {
     includeTimestamp: true
   },
 
-  // Operational availability defaults
+  // Operational availability defaults (in hours)
   operationalAvailability: {
-    defaultSessionMinutes: 60,
-    defaultWeeklyMinutes: 240,
-    defaultBreakPer4Hours: 15,
-    defaultMealBreak: 30
+    defaultSessionHours: 1.0,        // 1 hour per session
+    defaultWeeklyHours: 4.0,          // 4 hours per week
+    defaultBreakPer4Hours: 0.25,      // 0.25 hours = 15 minutes
+    defaultMealBreak: 0.5             // 0.5 hours = 30 minutes
   },
 
   // Feature flags
