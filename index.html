@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Proposal Intake Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Learning Proposal Intake Form</h1>
+            <p class="subtitle">Complete all required sections to submit your learning and development proposal</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="project">Project</button>
+            <button class="tab-button" data-tab="client">Client</button>
+            <button class="tab-button" data-tab="audience">Audience</button>
+            <button class="tab-button" data-tab="business">Business</button>
+            <button class="tab-button" data-tab="constraints">Constraints</button>
+            <button class="tab-button" data-tab="strategy">Strategy</button>
+            <button class="tab-button" data-tab="curriculum">Curriculum</button>
+            <button class="tab-button" data-tab="plan">Plan</button>
+            <button class="tab-button" data-tab="resources">Resources</button>
+            <button class="tab-button" data-tab="legal">Legal</button>
+        </div>
+
+        <form id="proposalForm">
+            <!-- PROJECT SECTION -->
+            <div class="tab-content active" id="project">
+                <h2>Project Information</h2>
+
+                <div class="form-group required">
+                    <label for="projectTitle">Project Title</label>
+                    <input type="text" id="projectTitle" name="project.title" required minlength="3">
+                    <span class="hint">Minimum 3 characters</span>
+                </div>
+
+                <div class="form-group required">
+                    <label for="projectSponsor">Project Sponsor</label>
+                    <input type="text" id="projectSponsor" name="project.sponsor" required>
+                </div>
+
+                <div class="form-group required">
+                    <label for="primaryContact">Primary Contact</label>
+                    <input type="text" id="primaryContact" name="project.primary_contact" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="background">Background</label>
+                    <textarea id="background" name="project.background" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="problemStatement">Problem Statement</label>
+                    <textarea id="problemStatement" name="project.problem_statement" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="successCriteria">Success Criteria</label>
+                    <textarea id="successCriteria" name="project.success_criteria" rows="3"></textarea>
+                    <span class="hint">Acceptance criteria for sign-off</span>
+                </div>
+
+                <h3>Timeline</h3>
+                <div class="form-group">
+                    <label for="targetLaunchDate">Target Launch Date</label>
+                    <input type="date" id="targetLaunchDate" name="project.timeline.target_launch_date">
+                </div>
+
+                <div class="form-group">
+                    <label>Milestones</label>
+                    <div id="milestones">
+                        <div class="array-item">
+                            <input type="text" name="project.timeline.milestones[]" placeholder="Milestone description">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addMilestone()">Add Milestone</button>
+                </div>
+            </div>
+
+            <!-- CLIENT SECTION -->
+            <div class="tab-content" id="client">
+                <h2>Client Information</h2>
+
+                <div class="form-group required">
+                    <label for="organization">Organization</label>
+                    <input type="text" id="organization" name="client.organization" required>
+                </div>
+
+                <div class="form-group required">
+                    <label for="industry">Industry</label>
+                    <input type="text" id="industry" name="client.industry" required>
+                </div>
+
+                <h3>Stakeholders</h3>
+                <div id="stakeholders">
+                    <div class="stakeholder-item card">
+                        <div class="form-group required">
+                            <label>Name</label>
+                            <input type="text" name="client.stakeholders[].name" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Role</label>
+                            <input type="text" name="client.stakeholders[].role" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Responsibilities</label>
+                            <textarea name="client.stakeholders[].responsibilities" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Influence Level</label>
+                            <select name="client.stakeholders[].influence">
+                                <option value="">Select...</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeArrayItem(this.parentElement)">Remove Stakeholder</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" onclick="addStakeholder()">Add Stakeholder</button>
+            </div>
+
+            <!-- AUDIENCE SECTION -->
+            <div class="tab-content" id="audience">
+                <h2>Audience Information</h2>
+
+                <div class="form-group required">
+                    <label for="audienceSize">Audience Size</label>
+                    <input type="number" id="audienceSize" name="audience.size" required min="1">
+                </div>
+
+                <h3>Audience Segments</h3>
+                <div id="segments">
+                    <div class="segment-item card">
+                        <div class="form-group required">
+                            <label>Label</label>
+                            <input type="text" name="audience.segments[].label" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Persona</label>
+                            <select name="audience.segments[].persona" required>
+                                <option value="">Select...</option>
+                                <option value="IC">IC (Individual Contributor)</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Leader">Leader</option>
+                                <option value="Mixed">Mixed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Experience Level</label>
+                            <select name="audience.segments[].experience_level">
+                                <option value="">Select...</option>
+                                <option value="novice">Novice</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                                <option value="mixed">Mixed</option>
+                            </select>
+                        </div>
+                        <div class="form-group required">
+                            <label>Geographic Locations</label>
+                            <input type="text" name="audience.segments[].geos" placeholder="e.g., North America, EMEA, APAC" data-array="true">
+                            <span class="hint">Comma-separated values</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Languages</label>
+                            <input type="text" name="audience.segments[].languages" placeholder="e.g., English, Spanish, French" data-array="true">
+                            <span class="hint">Comma-separated values</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Access Needs</label>
+                            <input type="text" name="audience.segments[].access_needs" placeholder="e.g., Screen reader support, Closed captions" data-array="true">
+                            <span class="hint">Comma-separated values</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Technology Environment</label>
+                            <input type="text" name="audience.segments[].tech_env" placeholder="e.g., Windows 10, Chrome, Mobile devices" data-array="true">
+                            <span class="hint">Devices/browsers/apps - Comma-separated values</span>
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeArrayItem(this.parentElement)">Remove Segment</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" onclick="addSegment()">Add Segment</button>
+            </div>
+
+            <!-- BUSINESS SECTION -->
+            <div class="tab-content" id="business">
+                <h2>Business Goals & Metrics</h2>
+
+                <div class="form-group">
+                    <label>Business Goals</label>
+                    <div id="goals">
+                        <div class="array-item">
+                            <input type="text" name="business.goals[]" placeholder="Business goal">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addGoal()">Add Goal</button>
+                </div>
+
+                <h3>Key Performance Indicators (KPIs)</h3>
+                <div id="kpis">
+                    <div class="kpi-item card">
+                        <div class="form-group required">
+                            <label>KPI Name</label>
+                            <input type="text" name="business.kpis[].name" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Baseline</label>
+                            <input type="number" name="business.kpis[].baseline" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Target</label>
+                            <input type="number" name="business.kpis[].target" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Unit</label>
+                            <input type="text" name="business.kpis[].unit" placeholder="e.g., %, hours, $">
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeArrayItem(this.parentElement)">Remove KPI</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" onclick="addKPI()">Add KPI</button>
+
+                <div class="form-group">
+                    <label>Root Causes</label>
+                    <div id="rootCauses">
+                        <div class="array-item">
+                            <input type="text" name="business.root_causes[]" placeholder="Root cause">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addRootCause()">Add Root Cause</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Non-Training Factors</label>
+                    <div id="nonTrainingFactors">
+                        <div class="array-item">
+                            <input type="text" name="business.non_training_factors[]" placeholder="Non-training factor">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addNonTrainingFactor()">Add Factor</button>
+                </div>
+            </div>
+
+            <!-- CONSTRAINTS SECTION -->
+            <div class="tab-content" id="constraints">
+                <h2>Constraints</h2>
+
+                <h3>Budget</h3>
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label for="currency">Currency</label>
+                        <input type="text" id="currency" name="constraints.budget.currency" required minlength="3" maxlength="3" placeholder="USD">
+                        <span class="hint">3-letter code (e.g., USD, EUR, GBP)</span>
+                    </div>
+                    <div class="form-group required">
+                        <label for="budgetAmount">Amount</label>
+                        <input type="number" id="budgetAmount" name="constraints.budget.amount" required min="0" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label for="timebox">Timebox</label>
+                    <input type="text" id="timebox" name="constraints.timebox" required placeholder="e.g., 6 weeks, Q1 only">
+                </div>
+
+                <div class="form-group">
+                    <label>Resources</label>
+                    <div id="resources">
+                        <div class="array-item">
+                            <input type="text" name="constraints.resources[]" placeholder="Available SMEs, tools, content">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addResource()">Add Resource</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Policies</label>
+                    <div id="policies">
+                        <div class="array-item">
+                            <input type="text" name="constraints.policies[]" placeholder="Compliance, accessibility, data">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addPolicy()">Add Policy</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="contentRights">Content Rights</label>
+                    <select id="contentRights" name="constraints.content_rights">
+                        <option value="">Select...</option>
+                        <option value="client_owns">Client Owns</option>
+                        <option value="shared">Shared</option>
+                        <option value="vendor_owns">Vendor Owns</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- STRATEGY SECTION -->
+            <div class="tab-content" id="strategy">
+                <h2>Learning Strategy</h2>
+
+                <div class="form-group required">
+                    <label>Delivery Methods</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="strategy.delivery[]" value="ILT"> ILT (Instructor-Led Training)</label>
+                        <label><input type="checkbox" name="strategy.delivery[]" value="VILT"> VILT (Virtual Instructor-Led Training)</label>
+                        <label><input type="checkbox" name="strategy.delivery[]" value="eLearning"> eLearning</label>
+                        <label><input type="checkbox" name="strategy.delivery[]" value="Microlearning"> Microlearning</label>
+                        <label><input type="checkbox" name="strategy.delivery[]" value="Blended"> Blended</label>
+                        <label><input type="checkbox" name="strategy.delivery[]" value="Cohort"> Cohort</label>
+                        <label><input type="checkbox" name="strategy.delivery[]" value="Coaching"> Coaching</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Engagement Strategies</label>
+                    <div id="engagement">
+                        <div class="array-item">
+                            <input type="text" name="strategy.engagement[]" placeholder="e.g., Simulations, scenarios, gamification">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addEngagement()">Add Strategy</button>
+                </div>
+
+                <h3>Analytics</h3>
+                <div class="form-group">
+                    <label>Standards</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="strategy.analytics.standards[]" value="SCORM"> SCORM</label>
+                        <label><input type="checkbox" name="strategy.analytics.standards[]" value="xAPI"> xAPI (Tin Can)</label>
+                        <label><input type="checkbox" name="strategy.analytics.standards[]" value="LTI"> LTI</label>
+                        <label><input type="checkbox" name="strategy.analytics.standards[]" value="None"> None</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dashboards</label>
+                    <div id="dashboards">
+                        <div class="array-item">
+                            <input type="text" name="strategy.analytics.dashboards[]" placeholder="Dashboard description">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addDashboard()">Add Dashboard</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="privacy">Privacy Policy</label>
+                    <textarea id="privacy" name="strategy.analytics.privacy" rows="3"></textarea>
+                </div>
+            </div>
+
+            <!-- CURRICULUM SECTION -->
+            <div class="tab-content" id="curriculum">
+                <h2>Curriculum Design</h2>
+
+                <div class="form-group">
+                    <label>Learning Objectives</label>
+                    <span class="hint">Bloom-aligned objectives</span>
+                    <div id="learningObjectives">
+                        <div class="array-item">
+                            <input type="text" name="curriculum.learning_objectives[]" placeholder="Learning objective">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addObjective()">Add Objective</button>
+                </div>
+
+                <h3>Modules</h3>
+                <div id="modules">
+                    <div class="module-item card">
+                        <div class="form-group required">
+                            <label>Module Title</label>
+                            <input type="text" name="curriculum.modules[].title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (minutes)</label>
+                            <input type="number" name="curriculum.modules[].duration_minutes" min="5">
+                        </div>
+                        <div class="form-group required">
+                            <label>Learning Outcomes</label>
+                            <input type="text" name="curriculum.modules[].outcomes" placeholder="Comma-separated outcomes" data-array="true" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Content Types</label>
+                            <input type="text" name="curriculum.modules[].content_types" placeholder="e.g., Video, Reading, Interactive" data-array="true">
+                        </div>
+                        <div class="form-group">
+                            <label>Assessments</label>
+                            <input type="text" name="curriculum.modules[].assessments" placeholder="e.g., Quiz, Project, Reflection" data-array="true">
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeArrayItem(this.parentElement)">Remove Module</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" onclick="addModule()">Add Module</button>
+            </div>
+
+            <!-- PLAN SECTION -->
+            <div class="tab-content" id="plan">
+                <h2>Project Plan</h2>
+
+                <h3>Work Breakdown</h3>
+                <div id="workBreakdown">
+                    <div class="work-item card">
+                        <div class="form-group required">
+                            <label>Task</label>
+                            <input type="text" name="plan.work_breakdown[].task" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Owner</label>
+                            <input type="text" name="plan.work_breakdown[].owner" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label>Start Date</label>
+                                <input type="date" name="plan.work_breakdown[].start" required>
+                            </div>
+                            <div class="form-group required">
+                                <label>End Date</label>
+                                <input type="date" name="plan.work_breakdown[].end" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Dependencies</label>
+                            <input type="text" name="plan.work_breakdown[].dependencies" placeholder="Comma-separated task names" data-array="true">
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeArrayItem(this.parentElement)">Remove Task</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" onclick="addWorkItem()">Add Task</button>
+
+                <h3>RACI Matrix</h3>
+                <div id="racis">
+                    <div class="raci-item card">
+                        <div class="form-group required">
+                            <label>Deliverable</label>
+                            <input type="text" name="plan.racis[].deliverable" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Responsible</label>
+                            <input type="text" name="plan.racis[].R" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Accountable</label>
+                            <input type="text" name="plan.racis[].A" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Consulted</label>
+                            <input type="text" name="plan.racis[].C" placeholder="Comma-separated names" data-array="true" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Informed</label>
+                            <input type="text" name="plan.racis[].I" placeholder="Comma-separated names" data-array="true" required>
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeArrayItem(this.parentElement)">Remove RACI</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" onclick="addRACI()">Add RACI</button>
+
+                <h3>Risk Management</h3>
+                <div id="risks">
+                    <div class="risk-item card">
+                        <div class="form-group required">
+                            <label>Risk Description</label>
+                            <textarea name="plan.risks[].risk" rows="2" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label>Likelihood</label>
+                                <select name="plan.risks[].likelihood" required>
+                                    <option value="">Select...</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group required">
+                                <label>Impact</label>
+                                <select name="plan.risks[].impact" required>
+                                    <option value="">Select...</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label>Mitigation Strategy</label>
+                            <textarea name="plan.risks[].mitigation" rows="2" required></textarea>
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeArrayItem(this.parentElement)">Remove Risk</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" onclick="addRisk()">Add Risk</button>
+            </div>
+
+            <!-- RESOURCES SECTION -->
+            <div class="tab-content" id="resources">
+                <h2>Resources & Assets</h2>
+
+                <div class="form-group">
+                    <label>Existing Assets</label>
+                    <div id="existingAssets">
+                        <div class="array-item">
+                            <input type="text" name="resources.existing_assets[]" placeholder="Asset description">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addExistingAsset()">Add Asset</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional References</label>
+                    <div id="additionalReferences">
+                        <div class="array-item">
+                            <input type="text" name="resources.additional_references[]" placeholder="Reference or URL">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addReference()">Add Reference</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Tools Stack</label>
+                    <div id="toolsStack">
+                        <div class="array-item">
+                            <input type="text" name="resources.tools_stack[]" placeholder="Tool or platform">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addTool()">Add Tool</button>
+                </div>
+            </div>
+
+            <!-- LEGAL SECTION -->
+            <div class="tab-content" id="legal">
+                <h2>Legal & Compliance</h2>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="ndaRequired" name="legal.nda_required">
+                        NDA Required
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="dpaRequired" name="legal.data_processing_addendum">
+                        Data Processing Addendum Required
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="ipNotes">Intellectual Property Notes</label>
+                    <textarea id="ipNotes" name="legal.ip_notes" rows="4"></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="previousTab()">Previous</button>
+                <button type="button" class="btn-secondary" onclick="nextTab()">Next</button>
+                <button type="button" class="btn-secondary" onclick="validateForm()">Validate</button>
+                <button type="button" class="btn-primary" onclick="downloadJSON()">Download JSON</button>
+                <button type="submit" class="btn-primary">Submit</button>
+            </div>
+        </form>
+
+        <div id="validationResults" class="validation-results"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
