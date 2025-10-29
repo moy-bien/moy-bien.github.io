@@ -28,6 +28,7 @@
             <button class="tab-button" data-tab="plan">Plan</button>
             <button class="tab-button" data-tab="resources">Resources</button>
             <button class="tab-button" data-tab="legal">Legal</button>
+            <button class="tab-button" data-tab="ai_summaries">AI Summaries</button>
         </div>
 
         <form id="proposalForm">
@@ -567,6 +568,67 @@
                 <div class="form-group">
                     <label for="ipNotes">Intellectual Property Notes</label>
                     <textarea id="ipNotes" name="legal.ip_notes" rows="4"></textarea>
+                </div>
+            </div>
+
+            <!-- AI SUMMARIES SECTION -->
+            <div class="tab-content" id="ai_summaries">
+                <h2>AI-Generated Summaries</h2>
+                <p class="section-description">This section tracks AI-generated content with approval workflow. Only approved content will be used in deck generation.</p>
+
+                <h3>Business Context</h3>
+                <div class="card">
+                    <h4>Source Inputs</h4>
+                    <div class="form-group">
+                        <label for="aiInputBackground">Background (from Project section)</label>
+                        <textarea id="aiInputBackground" name="ai_summaries.business_context.inputs.background" rows="3" readonly></textarea>
+                        <span class="hint">Auto-populated from Project Background</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aiInputProblem">Problem Statement (from Project section)</label>
+                        <textarea id="aiInputProblem" name="ai_summaries.business_context.inputs.problem_statement" rows="3" readonly></textarea>
+                        <span class="hint">Auto-populated from Project Problem Statement</span>
+                    </div>
+
+                    <button type="button" class="btn-add" onclick="generateBusinessContextSummary()">Generate AI Summary</button>
+
+                    <h4 style="margin-top: 2rem;">AI-Generated Draft</h4>
+                    <div class="form-group">
+                        <label for="aiDraft">Summary Draft</label>
+                        <textarea id="aiDraft" name="ai_summaries.business_context.draft" rows="6"></textarea>
+                        <span class="hint">AI-generated summary based on the inputs above</span>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="aiStatus">Approval Status</label>
+                        <select id="aiStatus" name="ai_summaries.business_context.status" required onchange="updateStatusWarning()">
+                            <option value="">Select status...</option>
+                            <option value="pending_synthesis">Pending Synthesis</option>
+                            <option value="awaiting_review">Awaiting Review</option>
+                            <option value="changes_requested">Changes Requested</option>
+                            <option value="approved">Approved</option>
+                        </select>
+                        <div id="statusWarning" class="status-warning" style="display: none;">
+                            <strong>⚠ Warning:</strong> Content is not approved. Deck generation will be blocked or show "Needs approval" watermark.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aiApprover">Approver</label>
+                        <input type="text" id="aiApprover" name="ai_summaries.business_context.approver" placeholder="Name of person who approved">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aiNotes">Review Notes</label>
+                        <textarea id="aiNotes" name="ai_summaries.business_context.notes" rows="3" placeholder="Feedback, changes requested, or approval comments"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aiConfidence">AI Confidence Score</label>
+                        <input type="number" id="aiConfidence" name="ai_summaries.business_context.confidence" min="0" max="1" step="0.01" placeholder="0.0 to 1.0">
+                        <span class="hint">Confidence level of the AI-generated content (0.0 = low, 1.0 = high)</span>
+                    </div>
                 </div>
             </div>
 

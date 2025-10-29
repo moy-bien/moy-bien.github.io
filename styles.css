@@ -143,6 +143,37 @@ h3 {
     font-weight: 600;
 }
 
+h4 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin: 1.5rem 0 1rem 0;
+    font-weight: 600;
+}
+
+.section-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: var(--bg-light);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 4px;
+}
+
+.status-warning {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 6px;
+    color: #92400e;
+    font-size: 0.9rem;
+}
+
+.status-warning strong {
+    color: #b45309;
+}
+
 /* Form groups */
 .form-group {
     margin-bottom: 1.5rem;
