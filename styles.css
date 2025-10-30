@@ -526,4 +526,198 @@ button {
         display: block !important;
         page-break-inside: avoid;
     }
+
+    .phase-indicator,
+    .draft-save-section,
+    .phase-separator {
+        display: none;
+    }
+}
+
+/* Phase Indicator */
+.phase-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1.5rem 2rem;
+    background: var(--bg-light);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.phase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.phase.active {
+    opacity: 1;
+}
+
+.phase-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.phase.active .phase-number {
+    background: var(--primary-color);
+}
+
+.phase-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.phase.active .phase-label {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Draft Save Section */
+.draft-save-section {
+    background: #f8f9fa;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem;
+    text-align: center;
+}
+
+.draft-save-section h3 {
+    margin: 0 0 0.5rem 0;
+    padding: 0;
+    border: none;
+    color: var(--text-primary);
+}
+
+.draft-save-section p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.draft-status {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 6px;
+    display: none;
+}
+
+.draft-status.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+}
+
+.draft-status.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+}
+
+.draft-status.info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+    display: block;
+}
+
+/* Phase Separator */
+.phase-separator {
+    border-top: 3px solid var(--border-color);
+    margin: 2.5rem 2rem;
+    padding-top: 2rem;
+    text-align: center;
+}
+
+.phase-separator h2 {
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.text-muted {
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Drafts Modal */
+.drafts-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.drafts-modal h3 {
+    margin: 0 0 1.5rem 0;
+    padding: 0;
+    border: none;
+}
+
+.drafts-modal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.drafts-modal li {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.drafts-modal button {
+    margin: 0.5rem 0.25rem 0 0;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.close-modal:hover {
+    color: var(--text-primary);
 }

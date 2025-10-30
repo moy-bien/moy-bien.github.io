@@ -27,6 +27,21 @@
             <div class="progress-fill" id="progressFill"></div>
         </div>
 
+        <div class="phase-indicator">
+            <div class="phase active" data-phase="1">
+                <span class="phase-number">1</span>
+                <span class="phase-label">Intake Meeting</span>
+            </div>
+            <div class="phase" data-phase="2">
+                <span class="phase-number">2</span>
+                <span class="phase-label">Consultant Planning</span>
+            </div>
+            <div class="phase" data-phase="3">
+                <span class="phase-number">3</span>
+                <span class="phase-label">Generate Deck</span>
+            </div>
+        </div>
+
         <div class="tabs">
             <button class="tab-button active" data-tab="project">Project</button>
             <button class="tab-button" data-tab="client">Client</button>
@@ -387,6 +402,32 @@
                         <span class="hint">0.25 hour increments (15 minute intervals)</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- DRAFT SAVE SECTION -->
+            <div class="draft-save-section">
+                <h3>Save Progress</h3>
+                <p>Complete Phase 1 during intake meeting. Save as draft and return later to complete strategy and curriculum planning.</p>
+
+                <button type="button" id="saveDraftBtn" class="btn-primary">
+                    Save Draft & Exit
+                </button>
+
+                <button type="button" id="loadDraftBtn" class="btn-secondary">
+                    Load Saved Draft
+                </button>
+
+                <button type="button" id="emailDraftBtn" class="btn-secondary">
+                    Email Draft Link
+                </button>
+
+                <div id="draftStatus" class="draft-status"></div>
+            </div>
+
+            <!-- PHASE SEPARATOR -->
+            <div class="phase-separator">
+                <h2>Phase 2: Consultant Planning</h2>
+                <p class="text-muted">Complete these sections when ready to finalize the proposal</p>
             </div>
 
             <!-- STRATEGY SECTION -->
