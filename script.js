@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Initialize DraftManager (handles auto-save, URL params, event listeners, etc.)
+    if (typeof DraftManager !== 'undefined') {
+        DraftManager.init();
+    }
+
+    // Initialize BrandingManager (already initialized in branding-manager.js)
+    // No action needed here as it auto-initializes
+
     // Form submission
     document.getElementById('proposalForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -597,23 +605,49 @@ async function generatePDF() {
 }
 
 // Generate PowerPoint
-async function generatePPTX() {
+async function generatePowerPoint() {
     try {
         const data = FormHandler.collectFormData();
         const errors = DataValidator.validate(data);
 
         if (errors.length > 0) {
-            alert('Please fix validation errors before generating PowerPoint');
-            validateForm();
-            return;
+            const proceed = confirm('There are validation errors. Generate PowerPoint anyway with available data?');
+            if (!proceed) {
+                validateForm();
+                return;
+            }
         }
 
+        // Show loading message
+        const loadingMsg = document.createElement('div');
+        loadingMsg.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10000;
+        `;
+        loadingMsg.innerHTML = '<h3>Generating PowerPoint...</h3><p>Please wait...</p>';
+        document.body.appendChild(loadingMsg);
+
         const blob = await PPTXGenerator.generateProposal(data);
-        PPTXGenerator.downloadPPTX(blob);
-        alert('PowerPoint generation complete! (Note: This is a mock PPTX. Integrate PptxGenJS for production use.)');
+        PPTXGenerator.downloadPPTX(blob, `${data.project?.title || 'learning-proposal'}.pptx`);
+
+        loadingMsg.remove();
+        alert('PowerPoint generated successfully! Your download should begin shortly.');
     } catch (error) {
+        console.error('PowerPoint generation error:', error);
         alert('PowerPoint generation failed: ' + error.message);
     }
+}
+
+// Alias for backward compatibility
+async function generatePPTX() {
+    return generatePowerPoint();
 }
 
 // Template management

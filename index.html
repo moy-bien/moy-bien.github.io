@@ -12,14 +12,17 @@
             <h1>Learning Proposal Intake Form</h1>
             <p class="subtitle">Complete all required sections to submit your learning and development proposal</p>
 
-            <div class="template-selector">
-                <label for="templateSelect">Template:</label>
-                <select id="templateSelect" onchange="applyTemplate(this.value)">
-                    <option value="">All Sections (Default)</option>
-                    <option value="standard">Standard Learning Proposal</option>
-                    <option value="enterprise">Enterprise Learning Proposal</option>
-                    <option value="quick">Quick Assessment</option>
-                </select>
+            <div class="header-actions">
+                <div class="template-selector">
+                    <label for="templateSelect">Template:</label>
+                    <select id="templateSelect" onchange="applyTemplate(this.value)">
+                        <option value="">All Sections (Default)</option>
+                        <option value="standard">Standard Learning Proposal</option>
+                        <option value="enterprise">Enterprise Learning Proposal</option>
+                        <option value="quick">Quick Assessment</option>
+                    </select>
+                </div>
+                <button type="button" class="btn-secondary" id="brandingBtn" onclick="openBrandingModal()">⚙️ Branding Settings</button>
             </div>
         </header>
 
@@ -66,16 +69,34 @@
                     <span class="hint">Minimum 3 characters</span>
                 </div>
 
-                <div class="form-group required">
-                    <label for="projectSponsor">Project Sponsor</label>
-                    <input type="text" id="projectSponsor" name="project.sponsor" required>
+                <h3>RACI Matrix - Key Contacts</h3>
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label for="primaryContact">Primary Contact (Responsible)</label>
+                        <input type="text" id="primaryContact" name="project.primary_contact" required>
+                        <span class="hint">Day-to-day project lead</span>
+                    </div>
+                    <div class="form-group required">
+                        <label for="projectSponsor">Sponsor (Accountable)</label>
+                        <input type="text" id="projectSponsor" name="project.sponsor" required>
+                        <span class="hint">Executive decision maker</span>
+                    </div>
                 </div>
 
-                <div class="form-group required">
-                    <label for="primaryContact">Primary Contact</label>
-                    <input type="text" id="primaryContact" name="project.primary_contact" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="operationalChampion">Operational Champion (Consulted)</label>
+                        <input type="text" id="operationalChampion" name="project.operational_champion">
+                        <span class="hint">Operations/business unit representative</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="otherStakeholders">Other Stakeholders (Informed)</label>
+                        <input type="text" id="otherStakeholders" name="project.other_stakeholders" placeholder="Comma-separated names" data-array="true">
+                        <span class="hint">Others who need updates</span>
+                    </div>
                 </div>
 
+                <h3>Project Context</h3>
                 <div class="form-group">
                     <label for="background">Background</label>
                     <textarea id="background" name="project.background" rows="4"></textarea>
@@ -86,10 +107,17 @@
                     <textarea id="problemStatement" name="project.problem_statement" rows="4"></textarea>
                 </div>
 
+                <h3>Success Criteria</h3>
+                <div class="form-group required">
+                    <label for="northStar">North Star Metric</label>
+                    <input type="text" id="northStar" name="project.success_criteria.north_star" required placeholder="e.g., Reduce onboarding time by 30%">
+                    <span class="hint">Primary success measure (REQUIRED)</span>
+                </div>
+
                 <div class="form-group">
-                    <label for="successCriteria">Success Criteria</label>
-                    <textarea id="successCriteria" name="project.success_criteria" rows="3"></textarea>
-                    <span class="hint">Acceptance criteria for sign-off</span>
+                    <label for="additionalCriteria">Additional Success Criteria</label>
+                    <textarea id="additionalCriteria" name="project.success_criteria.additional" rows="3"></textarea>
+                    <span class="hint">Other acceptance criteria for sign-off</span>
                 </div>
 
                 <h3>Timeline</h3>
@@ -159,36 +187,72 @@
                 <h2>Audience Information</h2>
 
                 <div class="form-group required">
-                    <label for="audienceSize">Audience Size</label>
+                    <label for="audienceSize">Total Audience Size</label>
                     <input type="number" id="audienceSize" name="audience.size" required min="1">
+                    <span class="hint">Total number of learners across all segments</span>
                 </div>
 
                 <h3>Audience Segments</h3>
+                <p class="section-description">Define each distinct group of learners. Number of Learners, Work Location, and Tech Comfort are required for each segment.</p>
                 <div id="segments">
                     <div class="segment-item card">
-                        <div class="form-group required">
-                            <label>Label</label>
-                            <input type="text" name="audience.segments[].label" required>
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label>Label</label>
+                                <input type="text" name="audience.segments[].label" required>
+                            </div>
+                            <div class="form-group required">
+                                <label>Number of Learners</label>
+                                <input type="number" name="audience.segments[].count" required min="1" placeholder="e.g., 50">
+                                <span class="hint">Required for planning</span>
+                            </div>
                         </div>
-                        <div class="form-group required">
-                            <label>Persona</label>
-                            <select name="audience.segments[].persona" required>
-                                <option value="">Select...</option>
-                                <option value="IC">IC (Individual Contributor)</option>
-                                <option value="Manager">Manager</option>
-                                <option value="Leader">Leader</option>
-                                <option value="Mixed">Mixed</option>
-                            </select>
+
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label>Work Location</label>
+                                <select name="audience.segments[].work_location" required>
+                                    <option value="">Select...</option>
+                                    <option value="on-site">On-Site</option>
+                                    <option value="remote">Remote</option>
+                                    <option value="hybrid">Hybrid</option>
+                                    <option value="field">Field/Mobile</option>
+                                </select>
+                                <span class="hint">Required for modality planning</span>
+                            </div>
+                            <div class="form-group required">
+                                <label>Tech Comfort Level</label>
+                                <select name="audience.segments[].tech_comfort" required>
+                                    <option value="">Select...</option>
+                                    <option value="low">Low - Needs simple tools</option>
+                                    <option value="medium">Medium - Comfortable with standard apps</option>
+                                    <option value="high">High - Tech savvy</option>
+                                </select>
+                                <span class="hint">Required for platform selection</span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Experience Level</label>
-                            <select name="audience.segments[].experience_level">
-                                <option value="">Select...</option>
-                                <option value="novice">Novice</option>
-                                <option value="intermediate">Intermediate</option>
-                                <option value="advanced">Advanced</option>
-                                <option value="mixed">Mixed</option>
-                            </select>
+
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label>Persona</label>
+                                <select name="audience.segments[].persona" required>
+                                    <option value="">Select...</option>
+                                    <option value="IC">IC (Individual Contributor)</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Leader">Leader</option>
+                                    <option value="Mixed">Mixed</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Experience Level</label>
+                                <select name="audience.segments[].experience_level">
+                                    <option value="">Select...</option>
+                                    <option value="novice">Novice</option>
+                                    <option value="intermediate">Intermediate</option>
+                                    <option value="advanced">Advanced</option>
+                                    <option value="mixed">Mixed</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group required">
                             <label>Geographic Locations</label>
@@ -247,10 +311,29 @@
 
             <!-- BUSINESS SECTION -->
             <div class="tab-content" id="business">
-                <h2>Business Goals & Metrics</h2>
+                <h2>Business Context</h2>
 
                 <div class="form-group">
-                    <label>Business Goals</label>
+                    <label for="currentProcess">Current Process/State</label>
+                    <textarea id="currentProcess" name="business.current_process" rows="4" placeholder="Describe how things work today..."></textarea>
+                    <span class="hint">What is the current state that needs to change?</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="challenges">Key Challenges</label>
+                    <textarea id="challenges" name="business.challenges" rows="4" placeholder="What problems or pain points exist?"></textarea>
+                    <span class="hint">What barriers prevent success today?</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="strategicGoals">Strategic Goals</label>
+                    <textarea id="strategicGoals" name="business.strategic_goals" rows="4" placeholder="How does this align with organizational priorities?"></textarea>
+                    <span class="hint">Connection to business strategy and objectives</span>
+                </div>
+
+                <h3>Business Goals</h3>
+                <div class="form-group">
+                    <label>Specific Business Goals</label>
                     <div id="goals">
                         <div class="array-item">
                             <input type="text" name="business.goals[]" placeholder="Business goal">
@@ -311,7 +394,7 @@
             <div class="tab-content" id="constraints">
                 <h2>Constraints</h2>
 
-                <h3>Budget</h3>
+                <h3>Budget & Timeline</h3>
                 <div class="form-row">
                     <div class="form-group required">
                         <label for="currency">Currency</label>
@@ -325,32 +408,71 @@
                 </div>
 
                 <div class="form-group required">
-                    <label for="timebox">Timebox</label>
-                    <input type="text" id="timebox" name="constraints.timebox" required placeholder="e.g., 6 weeks, Q1 only">
+                    <label for="timebox">Timeline Constraint</label>
+                    <input type="text" id="timebox" name="constraints.timebox" required placeholder="e.g., 6 weeks, Q1 only, By end of fiscal year">
+                </div>
+
+                <h3>Technology</h3>
+                <div class="form-group">
+                    <label for="techStack">Technology Stack</label>
+                    <textarea id="techStack" name="constraints.technology.stack" rows="3" placeholder="LMS platform, authoring tools, browsers, devices..."></textarea>
+                    <span class="hint">Required platforms, tools, and environments</span>
                 </div>
 
                 <div class="form-group">
-                    <label>Resources</label>
-                    <div id="resources">
-                        <div class="array-item">
-                            <input type="text" name="constraints.resources[]" placeholder="Available SMEs, tools, content">
-                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-add" onclick="addResource()">Add Resource</button>
+                    <label for="techLimitations">Technology Limitations</label>
+                    <textarea id="techLimitations" name="constraints.technology.limitations" rows="3" placeholder="Blocked sites, firewall restrictions, device policies..."></textarea>
+                    <span class="hint">Known technical barriers or restrictions</span>
+                </div>
+
+                <h3>Compliance & Policies</h3>
+                <div class="form-group">
+                    <label for="complianceReqs">Compliance Requirements</label>
+                    <textarea id="complianceReqs" name="constraints.compliance.requirements" rows="3" placeholder="GDPR, HIPAA, SOC 2, industry-specific regulations..."></textarea>
+                    <span class="hint">Legal and regulatory requirements</span>
                 </div>
 
                 <div class="form-group">
-                    <label>Policies</label>
+                    <label>Accessibility & Data Policies</label>
                     <div id="policies">
                         <div class="array-item">
-                            <input type="text" name="constraints.policies[]" placeholder="Compliance, accessibility, data">
+                            <input type="text" name="constraints.policies[]" placeholder="e.g., WCAG 2.1 AA, Section 508, Data residency">
                             <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
                         </div>
                     </div>
                     <button type="button" class="btn-add" onclick="addPolicy()">Add Policy</button>
                 </div>
 
+                <h3>Language Requirements</h3>
+                <div class="form-group">
+                    <label for="primaryLanguage">Primary Language</label>
+                    <input type="text" id="primaryLanguage" name="constraints.language.primary" placeholder="e.g., English">
+                </div>
+
+                <div class="form-group">
+                    <label for="additionalLanguages">Additional Languages</label>
+                    <input type="text" id="additionalLanguages" name="constraints.language.additional" placeholder="Comma-separated languages" data-array="true">
+                    <span class="hint">Languages requiring translation/localization</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="localizationNotes">Localization Notes</label>
+                    <textarea id="localizationNotes" name="constraints.language.localization_notes" rows="2" placeholder="Cultural considerations, dialect preferences..."></textarea>
+                </div>
+
+                <h3>Resources Available</h3>
+                <div class="form-group">
+                    <label>Resources</label>
+                    <div id="resources">
+                        <div class="array-item">
+                            <input type="text" name="constraints.resources[]" placeholder="Available SMEs, existing content, tools...">
+                            <button type="button" class="btn-remove" onclick="removeArrayItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addResource()">Add Resource</button>
+                </div>
+
+                <h3>Other Constraints</h3>
                 <div class="form-group">
                     <label for="contentRights">Content Rights</label>
                     <select id="contentRights" name="constraints.content_rights">
@@ -359,6 +481,11 @@
                         <option value="shared">Shared</option>
                         <option value="vendor_owns">Vendor Owns</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="otherConstraints">Additional Constraints</label>
+                    <textarea id="otherConstraints" name="constraints.other" rows="3" placeholder="Any other limitations, preferences, or requirements..."></textarea>
                 </div>
 
                 <h3>Operational Availability</h3>
@@ -720,12 +847,133 @@
                 <button type="button" class="btn-secondary" onclick="nextTab()">Next</button>
                 <button type="button" class="btn-secondary" onclick="validateForm()">Validate</button>
                 <button type="button" class="btn-primary" onclick="downloadJSON()">Download JSON</button>
+                <button type="button" class="btn-primary" onclick="generatePowerPoint()">Generate PowerPoint</button>
                 <button type="submit" class="btn-primary">Submit</button>
             </div>
         </form>
 
         <div id="validationResults" class="validation-results"></div>
     </div>
+
+    <!-- Branding Settings Modal -->
+    <div id="brandingModal" class="modal">
+        <div class="modal-content branding-modal">
+            <div class="modal-header">
+                <h2>Branding Settings</h2>
+                <button class="modal-close" onclick="closeBrandingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Logo</h3>
+                <div class="form-group">
+                    <label for="brandLogo">Upload Logo (Medium Size)</label>
+                    <input type="file" id="brandLogo" accept="image/*" onchange="handleLogoUpload(event)">
+                    <div id="logoPreview" class="logo-preview"></div>
+                </div>
+
+                <h3>Brand Colors</h3>
+                <div class="color-presets">
+                    <div class="preset-option" data-preset="blue" onclick="applyColorPreset('blue')" style="--preset-primary: #2563eb; --preset-accent: #3b82f6;">
+                        <div class="preset-colors">
+                            <span class="color-box" style="background: #2563eb;"></span>
+                            <span class="color-box" style="background: #3b82f6;"></span>
+                        </div>
+                        <span>Blue</span>
+                    </div>
+                    <div class="preset-option" data-preset="green" onclick="applyColorPreset('green')" style="--preset-primary: #059669; --preset-accent: #10b981;">
+                        <div class="preset-colors">
+                            <span class="color-box" style="background: #059669;"></span>
+                            <span class="color-box" style="background: #10b981;"></span>
+                        </div>
+                        <span>Green</span>
+                    </div>
+                    <div class="preset-option" data-preset="purple" onclick="applyColorPreset('purple')" style="--preset-primary: #7c3aed; --preset-accent: #8b5cf6;">
+                        <div class="preset-colors">
+                            <span class="color-box" style="background: #7c3aed;"></span>
+                            <span class="color-box" style="background: #8b5cf6;"></span>
+                        </div>
+                        <span>Purple</span>
+                    </div>
+                    <div class="preset-option" data-preset="orange" onclick="applyColorPreset('orange')" style="--preset-primary: #ea580c; --preset-accent: #f97316;">
+                        <div class="preset-colors">
+                            <span class="color-box" style="background: #ea580c;"></span>
+                            <span class="color-box" style="background: #f97316;"></span>
+                        </div>
+                        <span>Orange</span>
+                    </div>
+                    <div class="preset-option" data-preset="teal" onclick="applyColorPreset('teal')" style="--preset-primary: #0d9488; --preset-accent: #14b8a6;">
+                        <div class="preset-colors">
+                            <span class="color-box" style="background: #0d9488;"></span>
+                            <span class="color-box" style="background: #14b8a6;"></span>
+                        </div>
+                        <span>Teal</span>
+                    </div>
+                    <div class="preset-option" data-preset="red" onclick="applyColorPreset('red')" style="--preset-primary: #dc2626; --preset-accent: #ef4444;">
+                        <div class="preset-colors">
+                            <span class="color-box" style="background: #dc2626;"></span>
+                            <span class="color-box" style="background: #ef4444;"></span>
+                        </div>
+                        <span>Red</span>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="customPrimary">Custom Primary Color</label>
+                        <input type="color" id="customPrimary" value="#7c3aed" onchange="updateCustomColors()">
+                    </div>
+                    <div class="form-group">
+                        <label for="customAccent">Custom Accent Color</label>
+                        <input type="color" id="customAccent" value="#8b5cf6" onchange="updateCustomColors()">
+                    </div>
+                </div>
+
+                <h3>Watermark (Optional)</h3>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="enableWatermark" onchange="toggleWatermark()">
+                        Enable Watermark
+                    </label>
+                </div>
+
+                <div id="watermarkOptions" style="display: none;">
+                    <div class="form-group">
+                        <label for="watermarkText">Watermark Text</label>
+                        <input type="text" id="watermarkText" placeholder="e.g., DRAFT, CONFIDENTIAL">
+                    </div>
+                    <div class="form-group">
+                        <label for="watermarkOpacity">Opacity</label>
+                        <input type="range" id="watermarkOpacity" min="0" max="100" value="15">
+                        <span id="opacityValue">15%</span>
+                    </div>
+                </div>
+
+                <h3>Footer Text</h3>
+                <div class="form-group">
+                    <label for="footerText">Custom Footer</label>
+                    <input type="text" id="footerText" placeholder="e.g., Company Name | Proprietary & Confidential">
+                </div>
+
+                <h3>Template Management</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="brandingTemplateName">Template Name</label>
+                        <input type="text" id="brandingTemplateName" placeholder="e.g., Company Standard">
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end; gap: 0.5rem;">
+                        <button type="button" class="btn-secondary" onclick="saveBrandingTemplate()">Save Template</button>
+                        <button type="button" class="btn-secondary" onclick="loadBrandingTemplate()">Load Template</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="resetBranding()">Reset to Default</button>
+                <button type="button" class="btn-primary" onclick="applyBranding()">Apply & Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 
     <!-- Configuration and utilities -->
     <script src="config.js"></script>
@@ -734,8 +982,10 @@
     <script src="ai-summarizer.js"></script>
     <script src="pdf-generator.js"></script>
     <script src="pptx-generator.js"></script>
+    <script src="draft-manager.js"></script>
+    <script src="branding-manager.js"></script>
 
-    <!-- Main application script --></script>
+    <!-- Main application script -->
     <script src="script.js"></script>
 </body>
 </html>

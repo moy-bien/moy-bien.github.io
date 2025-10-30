@@ -721,3 +721,236 @@ button {
 .close-modal:hover {
     color: var(--text-primary);
 }
+
+/* Header Actions */
+.header-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+#brandingBtn {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#brandingBtn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Branding Modal */
+.branding-modal {
+    max-width: 700px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.branding-modal .modal-header {
+    padding: 1.5rem;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.branding-modal .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: var(--error-color);
+}
+
+.branding-modal .modal-body {
+    padding: 2rem;
+}
+
+.branding-modal .modal-footer {
+    padding: 1.5rem;
+    background: var(--bg-light);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.branding-modal h3 {
+    margin: 2rem 0 1rem 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.branding-modal h3:first-of-type {
+    margin-top: 0;
+}
+
+/* Logo Preview */
+.logo-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 2px dashed var(--border-color);
+    border-radius: 6px;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-light);
+}
+
+.logo-preview img {
+    max-width: 200px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+/* Color Presets */
+.color-presets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.preset-option {
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.preset-option:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.preset-option.active {
+    border-color: var(--primary-color);
+    background: rgba(37, 99, 235, 0.05);
+    box-shadow: var(--shadow-md);
+}
+
+.preset-colors {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.color-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.preset-option span:last-child {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Watermark Options */
+#watermarkOptions {
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 6px;
+    margin-top: 1rem;
+}
+
+#watermarkOpacity {
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+#opacityValue {
+    display: inline-block;
+    margin-left: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Section Description */
+.section-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .color-presets {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .header-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .template-selector {
+        flex-direction: column;
+    }
+    
+    .branding-modal {
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+}

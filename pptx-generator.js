@@ -48,64 +48,36 @@ const PPTXGenerator = {
   },
 
   /**
-   * Create slide structure for presentation
+   * Create slide structure for presentation (9 professional slides)
    */
   createSlideStructure(data, config) {
     const slides = [];
 
-    // Title Slide
+    // 1. Title Slide
     slides.push(this.createTitleSlide(data));
 
-    // Agenda Slide
-    slides.push(this.createAgendaSlide(data));
-
-    // Executive Summary (using AI summary if approved)
+    // 2. Executive Summary / Business Context
     slides.push(this.createExecutiveSummarySlide(data));
 
-    // Project Overview
-    slides.push(this.createProjectOverviewSlide(data.project));
+    // 3. Success Criteria (North Star)
+    slides.push(this.createSuccessCriteriaSlide(data.project));
 
-    // Client & Stakeholders
-    slides.push(this.createClientSlide(data.client));
+    // 4. Target Audience
+    slides.push(this.createAudienceOverviewSlide(data.audience));
 
-    // Audience Analysis
-    if (data.audience?.segments) {
-      slides.push(...this.createAudienceSlides(data.audience));
-    }
+    // 5. Constraints & Operational Availability
+    slides.push(this.createConstraintsSlide(data.constraints));
 
-    // Business Case
-    slides.push(this.createBusinessCaseSlide(data.business));
-
-    // Learning Objectives (if curriculum exists)
-    if (data.curriculum?.learning_objectives) {
-      slides.push(this.createLearningObjectivesSlide(data.curriculum));
-    }
-
-    // Learning Strategy
+    // 6. Learning Strategy
     slides.push(this.createLearningStrategySlide(data.strategy));
 
-    // Curriculum Modules (if exists)
-    if (data.curriculum?.modules) {
-      slides.push(...this.createModuleSlides(data.curriculum.modules));
-    }
+    // 7. Curriculum Overview
+    slides.push(this.createCurriculumOverviewSlide(data.curriculum));
 
-    // Project Plan Timeline
-    if (data.plan?.work_breakdown) {
-      slides.push(this.createTimelineSlide(data.plan));
-    }
+    // 8. Project Plan & Timeline
+    slides.push(this.createProjectPlanSlide(data));
 
-    // Budget & Resources
-    slides.push(this.createBudgetSlide(data.constraints));
-
-    // Risks & Mitigation
-    if (data.plan?.risks) {
-      slides.push(this.createRisksSlide(data.plan.risks));
-    }
-
-    // Next Steps
-    slides.push(this.createNextStepsSlide(data));
-
-    // Thank You / Contact
+    // 9. Thank You / Next Steps
     slides.push(this.createClosingSlide(data));
 
     return slides;
@@ -126,53 +98,191 @@ const PPTXGenerator = {
   },
 
   /**
-   * Create agenda slide
+   * Create success criteria slide (North Star)
    */
-  createAgendaSlide(data) {
-    const agendaItems = [
-      'Business Context & Objectives',
-      'Audience Analysis',
-      'Learning Strategy',
-      data.curriculum ? 'Curriculum Overview' : null,
-      'Project Plan & Timeline',
-      'Budget & Resources',
-      'Next Steps'
-    ].filter(Boolean);
+  createSuccessCriteriaSlide(project) {
+    const content = [];
 
-    return {
-      type: 'content',
-      title: 'Agenda',
-      content: agendaItems,
-      notes: 'Overview of presentation structure - 30-45 minutes'
-    };
-  },
+    if (project?.success_criteria?.north_star) {
+      content.push(`🎯 North Star: ${project.success_criteria.north_star}`);
+    }
 
-  /**
-   * Create executive summary slide using AI summary
-   */
-  createExecutiveSummarySlide(data) {
-    let summary = [];
-
-    if (data.ai_summaries?.business_context?.status === 'approved') {
-      // Use approved AI summary
-      const aiText = data.ai_summaries.business_context.draft;
-      // Extract key points from AI summary
-      summary = this.extractKeyPoints(aiText, 5);
-    } else {
-      // Fallback to manual summary
-      summary = [
-        data.project?.problem_statement || 'Problem statement to be defined',
-        `Target audience: ${data.audience?.size || 'TBD'} participants`,
-        `Budget: ${data.constraints?.budget?.currency} ${data.constraints?.budget?.amount || '0'}`,
-        `Timeline: ${data.constraints?.timebox || 'TBD'}`
-      ];
+    if (project?.success_criteria?.additional) {
+      content.push('');
+      content.push('Additional Success Criteria:');
+      content.push(project.success_criteria.additional);
     }
 
     return {
       type: 'content',
-      title: 'Executive Summary',
-      content: summary,
-      notes: this.generateSpeakerNotes('executive-summary', data)
+      title: 'Success Criteria',
+      content: content.length > 0 ? content : ['Success criteria to be defined'],
+      notes: 'Focus on the North Star metric - the primary measure of success for this initiative.'
+    };
+  },
+
+  /**
+   * Create audience overview slide
+   */
+  createAudienceOverviewSlide(audience) {
+    const content = {
+      'Total Learners': audience?.size || 'TBD',
+      'Number of Segments': audience?.segments?.length || 0
+    };
+
+    if (audience?.segments?.length > 0) {
+      const segment = audience.segments[0];
+      content['Example Segment'] = segment.label || 'N/A';
+      content['Work Location'] = segment.work_location || 'N/A';
+      content['Tech Comfort'] = segment.tech_comfort || 'N/A';
+      content['Number of Learners'] = segment.count || 'N/A';
+    }
+
+    return {
+      type: 'content',
+      title: 'Target Audience',
+      content,
+      notes: 'Highlight key audience characteristics that will inform learning strategy and modality selection.'
+    };
+  },
+
+  /**
+   * Create constraints slide
+   */
+  createConstraintsSlide(constraints) {
+    const content = {
+      'Budget': `${constraints?.budget?.currency || '?'} ${constraints?.budget?.amount || '0'}`,
+      'Timeline': constraints?.timebox || 'TBD'
+    };
+
+    // Operational availability
+    if (constraints?.operational_availability) {
+      const oa = constraints.operational_availability;
+      content['Max Time/Session'] = oa.max_time_away_per_session_hours ? `${oa.max_time_away_per_session_hours} hours` : 'Not specified';
+      content['Max Time/Week'] = oa.max_total_time_away_per_week_hours ? `${oa.max_total_time_away_per_week_hours} hours` : 'Not specified';
+    }
+
+    // Technology
+    if (constraints?.technology?.stack) {
+      content['Technology'] = constraints.technology.stack.substring(0, 100);
+    }
+
+    // Compliance
+    if (constraints?.compliance?.requirements) {
+      content['Compliance'] = constraints.compliance.requirements.substring(0, 100);
+    }
+
+    return {
+      type: 'content',
+      title: 'Constraints & Operational Availability',
+      content,
+      notes: 'Key constraints that will shape the learning solution design.'
+    };
+  },
+
+  /**
+   * Create curriculum overview slide
+   */
+  createCurriculumOverviewSlide(curriculum) {
+    const content = [];
+
+    if (curriculum?.learning_objectives) {
+      content.push('Learning Objectives:');
+      curriculum.learning_objectives.slice(0, 4).forEach(obj => {
+        content.push(`• ${obj}`);
+      });
+    }
+
+    if (curriculum?.modules) {
+      content.push('');
+      content.push(`Number of Modules: ${curriculum.modules.length}`);
+      const totalDuration = curriculum.modules.reduce((sum, m) => sum + (m.duration_minutes || 0), 0);
+      content.push(`Total Duration: ${totalDuration} minutes`);
+    }
+
+    return {
+      type: 'content',
+      title: 'Curriculum Overview',
+      content: content.length > 0 ? content : ['Curriculum to be developed'],
+      notes: 'High-level overview of learning objectives and curriculum structure.'
+    };
+  },
+
+  /**
+   * Create project plan slide
+   */
+  createProjectPlanSlide(data) {
+    const content = [];
+
+    if (data.project?.timeline?.target_launch_date) {
+      content.push(`Target Launch: ${data.project.timeline.target_launch_date}`);
+    }
+
+    if (data.project?.timeline?.milestones) {
+      content.push('');
+      content.push('Key Milestones:');
+      data.project.timeline.milestones.slice(0, 4).forEach(m => {
+        content.push(`• ${m}`);
+      });
+    }
+
+    if (data.plan?.work_breakdown) {
+      content.push('');
+      content.push(`Total Tasks: ${data.plan.work_breakdown.length}`);
+    }
+
+    if (data.plan?.risks) {
+      content.push('');
+      content.push(`Identified Risks: ${data.plan.risks.length}`);
+    }
+
+    return {
+      type: 'content',
+      title: 'Project Plan & Timeline',
+      content: content.length > 0 ? content : ['Project plan to be finalized'],
+      notes: 'Overview of project timeline, milestones, and risk management approach.'
+    };
+  },
+
+  /**
+   * Create executive summary slide using business context
+   */
+  createExecutiveSummarySlide(data) {
+    const content = [];
+
+    // Current process/state
+    if (data.business?.current_process) {
+      content.push('Current State:');
+      content.push(data.business.current_process.substring(0, 150) + '...');
+      content.push('');
+    }
+
+    // Key challenges
+    if (data.business?.challenges) {
+      content.push('Key Challenges:');
+      content.push(data.business.challenges.substring(0, 150) + '...');
+      content.push('');
+    }
+
+    // Strategic goals
+    if (data.business?.strategic_goals) {
+      content.push('Strategic Goals:');
+      content.push(data.business.strategic_goals.substring(0, 150) + '...');
+    }
+
+    // Fallback if no business context
+    if (content.length === 0) {
+      content.push(data.project?.problem_statement || 'Business context to be defined');
+      content.push('');
+      content.push(`Target audience: ${data.audience?.size || 'TBD'} participants`);
+      content.push(`Budget: ${data.constraints?.budget?.currency || ''} ${data.constraints?.budget?.amount || '0'}`);
+    }
+
+    return {
+      type: 'content',
+      title: 'Business Context & Executive Summary',
+      content,
+      notes: 'Provide overview of current state, challenges, and how this learning initiative aligns with strategic goals.'
     };
   },
 
@@ -377,33 +487,15 @@ const PPTXGenerator = {
   },
 
   /**
-   * Create next steps slide
-   */
-  createNextStepsSlide(data) {
-    return {
-      type: 'content',
-      title: 'Next Steps',
-      content: [
-        'Review and approve this proposal',
-        'Finalize project timeline',
-        'Confirm resource allocation',
-        'Schedule kickoff meeting',
-        'Begin content development'
-      ],
-      notes: 'Action items and timeline for moving forward'
-    };
-  },
-
-  /**
-   * Create closing slide
+   * Create closing slide with next steps
    */
   createClosingSlide(data) {
     return {
       type: 'closing',
       title: 'Thank You',
-      subtitle: 'Questions & Discussion',
-      contact: data.project?.primary_contact || '',
-      notes: 'Open for questions and discussion'
+      subtitle: 'Next Steps & Questions',
+      contact: data.project?.primary_contact || 'Contact information',
+      notes: 'Review proposal, finalize timeline, confirm resources, schedule kickoff, and open for Q&A'
     };
   },
 
@@ -429,24 +521,276 @@ const PPTXGenerator = {
   },
 
   /**
-   * Create mock PPTX blob (placeholder)
+   * Create actual PPTX using PptxGenJS
    */
   async createPresentationBlob(slides, config) {
-    const mockPPTX = `Mock PowerPoint Presentation
-Generated: ${new Date().toISOString()}
-Slides: ${slides.length}
-Layout: ${config.layout}
+    // Get branding settings
+    const branding = BrandingManager.getSettings();
 
-This is a placeholder for PPTX generation.
-To enable actual PowerPoint generation, integrate PptxGenJS library.
+    // Create new presentation
+    const pptx = new PptxGenJS();
 
-Slide titles:
-${slides.map((s, i) => `${i + 1}. ${s.title}`).join('\n')}
-`;
+    // Set presentation properties
+    pptx.layout = config.layout === 'LAYOUT_4x3' ? 'LAYOUT_4x3' : 'LAYOUT_16x9';
+    pptx.author = 'Learning Proposal Generator';
+    pptx.company = 'L&D Team';
+    pptx.revision = '1';
+    pptx.subject = 'Learning Proposal';
+    pptx.title = slides[0]?.title || 'Learning Proposal';
 
-    return new Blob([mockPPTX], {
-      type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    // Define color scheme from branding
+    const colors = {
+      primary: branding.colors.primary,
+      accent: branding.colors.accent,
+      dark: '#1e293b',
+      light: '#f8fafc',
+      text: '#334155'
+    };
+
+    // Process each slide
+    for (const slideData of slides) {
+      const slide = pptx.addSlide();
+
+      // Add logo if available
+      if (branding.logo) {
+        try {
+          slide.addImage({
+            data: branding.logo,
+            x: 0.5,
+            y: 0.3,
+            w: 1.5,
+            h: 0.5
+          });
+        } catch (e) {
+          console.warn('Could not add logo to slide:', e);
+        }
+      }
+
+      // Add watermark if enabled
+      if (branding.watermark.enabled && branding.watermark.text) {
+        slide.addText(branding.watermark.text, {
+          x: 1,
+          y: 3,
+          w: 8,
+          h: 1,
+          fontSize: 72,
+          color: '999999',
+          rotate: 315,
+          transparency: Math.round((1 - branding.watermark.opacity) * 100),
+          align: 'center',
+          valign: 'middle'
+        });
+      }
+
+      // Add footer
+      if (branding.footer) {
+        slide.addText(branding.footer, {
+          x: 0.5,
+          y: 7,
+          w: 9,
+          h: 0.3,
+          fontSize: 10,
+          color: '666666',
+          align: 'center'
+        });
+      }
+
+      // Render slide based on type
+      if (slideData.type === 'title') {
+        this.renderTitleSlide(slide, slideData, colors);
+      } else if (slideData.type === 'closing') {
+        this.renderClosingSlide(slide, slideData, colors);
+      } else {
+        this.renderContentSlide(slide, slideData, colors);
+      }
+
+      // Add speaker notes if enabled
+      if (config.includeNotes && slideData.notes) {
+        slide.addNotes(slideData.notes);
+      }
+
+      // Add slide numbers if enabled
+      if (config.slideNumbers) {
+        slide.slideNumber = {
+          x: 9,
+          y: 7,
+          fontFace: 'Arial',
+          fontSize: 10,
+          color: '666666'
+        };
+      }
+    }
+
+    // Generate and return blob
+    return await pptx.write({ outputType: 'blob' });
+  },
+
+  /**
+   * Render title slide
+   */
+  renderTitleSlide(slide, data, colors) {
+    // Title background
+    slide.addShape(pptx.ShapeType.rect, {
+      x: 0,
+      y: 2.5,
+      w: 10,
+      h: 3,
+      fill: { color: colors.primary }
     });
+
+    // Main title
+    slide.addText(data.title, {
+      x: 0.5,
+      y: 2.8,
+      w: 9,
+      h: 1,
+      fontSize: 44,
+      bold: true,
+      color: 'FFFFFF',
+      align: 'center'
+    });
+
+    // Subtitle
+    slide.addText(data.subtitle, {
+      x: 0.5,
+      y: 3.8,
+      w: 9,
+      h: 0.5,
+      fontSize: 24,
+      color: 'FFFFFF',
+      align: 'center'
+    });
+
+    // Date and presenter
+    slide.addText(`${data.date}\n${data.presenter}`, {
+      x: 0.5,
+      y: 4.5,
+      w: 9,
+      h: 0.8,
+      fontSize: 14,
+      color: 'FFFFFF',
+      align: 'center'
+    });
+  },
+
+  /**
+   * Render content slide
+   */
+  renderContentSlide(slide, data, colors) {
+    // Header bar
+    slide.addShape(pptx.ShapeType.rect, {
+      x: 0,
+      y: 0,
+      w: 10,
+      h: 1,
+      fill: { color: colors.primary }
+    });
+
+    // Slide title
+    slide.addText(data.title, {
+      x: 0.5,
+      y: 0.2,
+      w: 9,
+      h: 0.6,
+      fontSize: 32,
+      bold: true,
+      color: 'FFFFFF'
+    });
+
+    // Content area
+    let yPos = 1.5;
+
+    if (Array.isArray(data.content)) {
+      // Bullet list
+      const bullets = data.content.map(item => ({
+        text: item,
+        options: { bullet: true, fontSize: 18, color: colors.text }
+      }));
+
+      slide.addText(bullets, {
+        x: 0.8,
+        y: yPos,
+        w: 8.4,
+        h: 5,
+        fontSize: 18,
+        color: colors.text
+      });
+
+    } else if (typeof data.content === 'object') {
+      // Key-value pairs
+      for (const [key, value] of Object.entries(data.content)) {
+        slide.addText(key, {
+          x: 0.8,
+          y: yPos,
+          w: 8.4,
+          h: 0.4,
+          fontSize: 20,
+          bold: true,
+          color: colors.primary
+        });
+
+        yPos += 0.4;
+
+        const valueText = Array.isArray(value) ? value.join(', ') : String(value);
+        slide.addText(valueText, {
+          x: 0.8,
+          y: yPos,
+          w: 8.4,
+          h: 0.5,
+          fontSize: 16,
+          color: colors.text
+        });
+
+        yPos += 0.7;
+
+        if (yPos > 6.5) break; // Prevent overflow
+      }
+    }
+  },
+
+  /**
+   * Render closing slide
+   */
+  renderClosingSlide(slide, data, colors) {
+    // Background
+    slide.background = { color: colors.primary };
+
+    // Thank you text
+    slide.addText(data.title, {
+      x: 0.5,
+      y: 2.5,
+      w: 9,
+      h: 1.5,
+      fontSize: 56,
+      bold: true,
+      color: 'FFFFFF',
+      align: 'center',
+      valign: 'middle'
+    });
+
+    // Subtitle
+    slide.addText(data.subtitle, {
+      x: 0.5,
+      y: 4,
+      w: 9,
+      h: 0.8,
+      fontSize: 28,
+      color: 'FFFFFF',
+      align: 'center'
+    });
+
+    // Contact info
+    if (data.contact) {
+      slide.addText(data.contact, {
+        x: 0.5,
+        y: 5.5,
+        w: 9,
+        h: 0.5,
+        fontSize: 18,
+        color: 'FFFFFF',
+        align: 'center'
+      });
+    }
   },
 
   /**
