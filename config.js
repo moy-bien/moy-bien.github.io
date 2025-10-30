@@ -77,7 +77,8 @@ const PROPOSAL_CONFIG = {
   features: {
     enableAISummaries: true,
     enableTemplates: true,
-    enableAutoSave: false,
+    enableAutoSave: true,
+    autoSaveInterval: 30000, // 30 seconds
     enableCollaboration: false,
     enableVersioning: false
   },

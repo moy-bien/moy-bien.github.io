@@ -26,36 +26,45 @@
             </div>
         </header>
 
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
+        <!-- Sticky Navigation -->
+        <div class="sticky-nav">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
 
-        <div class="phase-indicator">
-            <div class="phase active" data-phase="1">
-                <span class="phase-number">1</span>
-                <span class="phase-label">Intake Meeting</span>
+            <!-- Auto-save Status Indicator -->
+            <div class="auto-save-indicator" id="autoSaveIndicator">
+                <span class="auto-save-icon">💾</span>
+                <span class="auto-save-text">Auto-save enabled</span>
             </div>
-            <div class="phase" data-phase="2">
-                <span class="phase-number">2</span>
-                <span class="phase-label">Consultant Planning</span>
-            </div>
-            <div class="phase" data-phase="3">
-                <span class="phase-number">3</span>
-                <span class="phase-label">Generate Deck</span>
-            </div>
-        </div>
 
-        <div class="tabs">
-            <button class="tab-button active" data-tab="project">Project</button>
-            <button class="tab-button" data-tab="client">Client</button>
-            <button class="tab-button" data-tab="audience">Audience</button>
-            <button class="tab-button" data-tab="business">Business</button>
-            <button class="tab-button" data-tab="constraints">Constraints</button>
-            <button class="tab-button" data-tab="strategy">Strategy</button>
-            <button class="tab-button" data-tab="curriculum">Curriculum</button>
-            <button class="tab-button" data-tab="plan">Plan</button>
-            <button class="tab-button" data-tab="legal">Legal</button>
-            <button class="tab-button" data-tab="ai_summaries">AI Summaries</button>
+            <div class="phase-indicator">
+                <div class="phase active" data-phase="1">
+                    <span class="phase-number">1</span>
+                    <span class="phase-label">Intake Meeting</span>
+                </div>
+                <div class="phase" data-phase="2">
+                    <span class="phase-number">2</span>
+                    <span class="phase-label">Consultant Planning</span>
+                </div>
+                <div class="phase" data-phase="3">
+                    <span class="phase-number">3</span>
+                    <span class="phase-label">Generate Deck</span>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-button active" data-tab="project">Project</button>
+                <button class="tab-button" data-tab="client">Client</button>
+                <button class="tab-button" data-tab="audience">Audience</button>
+                <button class="tab-button" data-tab="business">Business</button>
+                <button class="tab-button" data-tab="constraints">Constraints</button>
+                <button class="tab-button" data-tab="strategy">Strategy</button>
+                <button class="tab-button" data-tab="curriculum">Curriculum</button>
+                <button class="tab-button" data-tab="plan">Plan</button>
+                <button class="tab-button" data-tab="legal">Legal</button>
+                <button class="tab-button" data-tab="ai_summaries">AI Summaries</button>
+            </div>
         </div>
 
         <form id="proposalForm">
@@ -984,6 +993,8 @@
     <script src="pptx-generator.js"></script>
     <script src="draft-manager.js"></script>
     <script src="branding-manager.js"></script>
+    <script src="progressive-disclosure.js"></script>
+    <script src="auto-save-manager.js"></script>
 
     <!-- Main application script -->
     <script src="script.js"></script>

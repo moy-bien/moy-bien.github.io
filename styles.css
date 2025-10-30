@@ -117,6 +117,15 @@ header h1 {
     width: 10%;
 }
 
+/* Sticky Navigation Container */
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* Tabs */
 .tabs {
     display: flex;
@@ -954,3 +963,457 @@ button {
         max-height: 95vh;
     }
 }
+
+/* ========================================
+   PHASE 2: PROGRESSIVE DISCLOSURE
+   ======================================== */
+
+/* Tab Completion Indicators */
+.tab-button::after {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 8px;
+    background: transparent;
+    border: 2px solid currentColor;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+}
+
+.tab-button.completed::after {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    opacity: 1;
+}
+
+.tab-button.in-progress::after {
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-hover));
+    border-color: var(--primary-color);
+    opacity: 1;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(0.9);
+    }
+}
+
+/* Field Focus Enhancement */
+.form-group {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.form-group:focus-within {
+    transform: translateX(4px);
+}
+
+.form-group:focus-within label {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Field Description Tooltips */
+.form-group .hint {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+.form-group:focus-within .hint {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 0.25rem;
+}
+
+/* Section Collapsible Headers */
+.tab-content h3 {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    transition: color 0.2s ease;
+}
+
+.tab-content h3:hover {
+    color: var(--primary-color);
+}
+
+.tab-content h3::after {
+    content: '▼';
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+    opacity: 0.5;
+}
+
+.tab-content h3.collapsed::after {
+    transform: rotate(-90deg);
+}
+
+.collapsible-section {
+    max-height: 5000px;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.3s ease;
+    opacity: 1;
+}
+
+.collapsible-section.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+/* Section Completion Summary */
+.section-completion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    background: var(--bg-light);
+    margin-left: 1rem;
+}
+
+.section-completion.complete {
+    background: rgba(22, 163, 74, 0.1);
+    color: var(--success-color);
+}
+
+.section-completion.in-progress {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-color);
+}
+
+/* Field Validation Feedback */
+.form-group.valid input,
+.form-group.valid textarea,
+.form-group.valid select {
+    border-color: var(--success-color);
+}
+
+.form-group.valid::before {
+    content: '✓';
+    position: absolute;
+    right: 1rem;
+    top: 2.5rem;
+    color: var(--success-color);
+    font-weight: bold;
+    font-size: 1.25rem;
+    opacity: 0;
+    animation: checkmark-appear 0.3s ease forwards;
+}
+
+@keyframes checkmark-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Required Field Indicators */
+.form-group.required label::after {
+    content: '*';
+    color: var(--error-color);
+    margin-left: 0.25rem;
+    font-weight: bold;
+}
+
+.form-group.required.valid label::after {
+    color: var(--success-color);
+    content: '✓';
+}
+
+/* Progress Steps */
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.progress-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding: 0.5rem;
+}
+
+.progress-step::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: var(--border-color);
+    z-index: 0;
+}
+
+.progress-step:first-child::before {
+    left: 50%;
+}
+
+.progress-step:last-child::before {
+    right: 50%;
+}
+
+.progress-step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-white);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+    position: relative;
+    z-index: 1;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+.progress-step.completed .progress-step-circle {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+}
+
+.progress-step.active .progress-step-circle {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+.progress-step-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.progress-step.active .progress-step-label {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.progress-step.completed .progress-step-label {
+    color: var(--success-color);
+}
+
+/* Smooth Section Transitions */
+.tab-content {
+    animation: fadeInSlide 0.4s ease;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Field Groups Enhancement */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.form-row .form-group {
+    margin-bottom: 0;
+}
+
+/* Helper Text Animation */
+.helper-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg-light);
+    border-radius: 4px;
+    border-left: 3px solid var(--primary-color);
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
+.form-group:focus-within .helper-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ========================================
+   PHASE 3: AUTO-SAVE INDICATOR
+   ======================================== */
+
+/* Auto-save Status Indicator */
+.auto-save-indicator {
+    position: absolute;
+    top: 8px;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
+.auto-save-indicator.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.auto-save-indicator.saving {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.auto-save-indicator.saved {
+    background: rgba(22, 163, 74, 0.1);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.auto-save-indicator.error {
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+
+.auto-save-icon {
+    font-size: 1rem;
+    animation: none;
+}
+
+.auto-save-indicator.saving .auto-save-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.auto-save-text {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Sticky nav adjustments for auto-save */
+.sticky-nav {
+    position: relative;
+}
+
+.phase-indicator {
+    position: relative;
+}
+
+/* Auto-save toast notification */
+.auto-save-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.auto-save-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.auto-save-toast.success {
+    border-left: 4px solid var(--success-color);
+}
+
+.auto-save-toast.error {
+    border-left: 4px solid var(--error-color);
+}
+
+.auto-save-toast-icon {
+    font-size: 1.5rem;
+}
+
+.auto-save-toast-content {
+    flex: 1;
+}
+
+.auto-save-toast-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.auto-save-toast-message {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Last saved indicator in draft section */
+.last-saved-time {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+.last-saved-time.recent {
+    color: var(--success-color);
+}
+
